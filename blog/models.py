@@ -3,19 +3,40 @@ from django.contrib.auth.models import User
 
 
 class MetaMixin(models.Model):
+    """メタ情報ミックスイン抽象モデル"""
+
     class Meta:
         abstract = True
 
-    alias = models.SlugField(null=True, blank=True)
-    sort = models.IntegerField(default=0, verbose_name="ソート")
-    created_at = models.DateTimeField(auto_now_add=True)
+    # 別名
+    alias = models.SlugField(
+        null=True, blank=True, verbose_name="別名", help_text="URL でアクセスする時に使用する識別子"
+    )
+
+    # ソート
+    sort = models.IntegerField(default=0, verbose_name="ソート", help_text="値の若い順で表示される。")
+
+    # 作成者
     created_user = models.ForeignKey(
-        User, related_name="created_%(class)s_set", on_delete=models.PROTECT
+        User,
+        related_name="created_%(class)s_set",
+        on_delete=models.PROTECT,
+        verbose_name="作成者",
     )
-    updated_at = models.DateTimeField(auto_now=True)
+
+    # 最終更新者
     updated_user = models.ForeignKey(
-        User, related_name="updated_%(class)s_set", on_delete=models.PROTECT
+        User,
+        related_name="updated_%(class)s_set",
+        on_delete=models.PROTECT,
+        verbose_name="最終更新者",
     )
+
+    # 作成日時
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # 最終更新日時
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class SeoMixin(models.Model):
@@ -27,8 +48,20 @@ class SeoMixin(models.Model):
 
 
 class Language(MetaMixin):
-    name = models.CharField(max_length=50)
-    code = models.CharField(max_length=20)
+    """言語モデル"""
+
+    class Meta:
+        verbose_name = verbose_name_plural = "言語"
+        ordering = ("sort",)
+
+    # 言語名称
+    name = models.CharField(max_length=50, verbose_name="言語名称")
+
+    # 言語コード
+    code = models.CharField(max_length=20, verbose_name="言語コード")
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class LanguageMixin(models.Model):
