@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Language
+from .models import Language, Tag
 
 
 class LanguageAdmin(admin.ModelAdmin):
@@ -24,4 +24,31 @@ class LanguageAdmin(admin.ModelAdmin):
     )
 
 
+class TagAdmin(admin.ModelAdmin):
+    """タグ管理クラス"""
+
+    # 一覧画面に表示するフィールド
+    list_display = ("name",)
+
+    # 編集画面で表示するフィールド
+    fieldsets = (
+        (None, {"fields": ("name", ("created_user", "updated_user"))}),
+        (
+            "オプション",
+            {
+                "classes": ("collapse",),
+                "fields": ("alias", "sort"),
+            },
+        ),
+        (
+            "SEO",
+            {
+                "classes": ("collapse",),
+                "fields": ("description", "keywords"),
+            },
+        ),
+    )
+
+
 admin.site.register(Language, LanguageAdmin)
+admin.site.register(Tag, TagAdmin)
