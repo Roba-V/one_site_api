@@ -40,11 +40,28 @@ class MetaMixin(models.Model):
 
 
 class SeoMixin(models.Model):
+    """SEOミックスイン抽象モデル"""
+
     class Meta:
         abstract = True
 
-    description = models.CharField(max_length=120, null=True, blank=True)
-    keywords = models.CharField(max_length=200, null=True, blank=True)
+    # メタディスクリプション
+    description = models.CharField(
+        max_length=120,
+        null=True,
+        blank=True,
+        verbose_name="メタディスクリプション",
+        help_text="最大120文字まで入力できる。",
+    )
+
+    # メタキーワード
+    keywords = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        verbose_name="メタキーワード",
+        help_text="5つを目安として入力する。",
+    )
 
 
 class Language(MetaMixin):
@@ -65,6 +82,8 @@ class Language(MetaMixin):
 
 
 class LanguageMixin(models.Model):
+    """言語ミックスイン抽象モデル"""
+
     class Meta:
         abstract = True
 
@@ -72,7 +91,17 @@ class LanguageMixin(models.Model):
 
 
 class Tag(MetaMixin, LanguageMixin, SeoMixin):
-    name = models.CharField(max_length=100)
+    """タグモデル"""
+
+    class Meta:
+        verbose_name = verbose_name_plural = "タグ"
+        ordering = ("sort",)
+
+    # タグ名称
+    name = models.CharField(max_length=100, verbose_name="タグ名称")
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Category(MetaMixin, LanguageMixin, SeoMixin):
