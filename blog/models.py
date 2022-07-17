@@ -106,13 +106,28 @@ class Tag(MetaMixin, LanguageMixin, SeoMixin):
 
 
 class Category(MetaMixin, LanguageMixin, SeoMixin):
-    class CategoryType(models.IntegerChoices):
-        CATEGORY = 1
-        SERIES = 2
+    """カテゴリーモデル"""
 
-    name = models.CharField(max_length=100)
-    parent_category = models.ForeignKey("self", on_delete=models.PROTECT)
-    category_type = models.IntegerField(choices=CategoryType.choices)
+    class CategoryType(models.IntegerChoices):
+        CATEGORY = 1, "カテゴリー"
+        SERIES = 2, "シリーズ"
+
+    class Meta:
+        verbose_name = verbose_name_plural = "カテゴリー"
+        ordering = ("sort",)
+
+    # カテゴリー名称
+    name = models.CharField(max_length=100, verbose_name="カテゴリー名称")
+
+    # 親カテゴリー
+    parent_category = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.PROTECT, verbose_name="親カテゴリー"
+    )
+
+    # カテゴリータイプ
+    category_type = models.IntegerField(
+        choices=CategoryType.choices, verbose_name="カテゴリータイプ"
+    )
 
     def __str__(self):
         return self.name
