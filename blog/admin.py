@@ -115,6 +115,7 @@ class ArticleAdmin(admin.ModelAdmin):
         "category",
         "language",
         "published_at",
+        "was_published_recently",
     )
 
     # リストフィルター

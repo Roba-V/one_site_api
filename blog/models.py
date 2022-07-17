@@ -1,5 +1,8 @@
+import datetime
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 
 
 class MetaMixin(models.Model):
@@ -168,6 +171,18 @@ class Article(MetaMixin, LanguageMixin, SeoMixin):
     published_at = models.DateTimeField(
         null=True, blank=True, verbose_name="公開日時", help_text="未来の時間を設定した場合に、予約公開になる。"
     )
+
+    @admin.display(boolean=True, description="最近公開？")
+    def was_published_recently(self) -> bool:
+        """最近公開した文章か判定する。
+        三日間以内に公開した文章かどうか判定する。
+
+        Returns: 判定結果
+
+        """
+        now = timezone.now()
+
+        return now - datetime.timedelta(days=3) <= self.published_at <= now
 
     def __str__(self) -> str:
         return self.title
