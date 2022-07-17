@@ -134,12 +134,38 @@ class Category(MetaMixin, LanguageMixin, SeoMixin):
 
 
 class Article(MetaMixin, LanguageMixin, SeoMixin):
-    title = models.CharField(max_length=250)
+    """文章モデル"""
+
+    class Meta:
+        verbose_name = verbose_name_plural = "文章"
+        ordering = ("sort",)
+
+    # タイトル
+    title = models.CharField(max_length=250, verbose_name="タイトル")
+
+    # 概要
+    overview = models.CharField(
+        max_length=500, null=True, blank=True, verbose_name="概要"
+    )
+
+    # 内容
+    content = models.TextField(verbose_name="内容")
+
+    # タグ
+    tags = models.ManyToManyField(Tag, verbose_name="タグ")
+
+    # カテゴリー
+    category = models.ForeignKey(
+        Category, on_delete=models.PROTECT, verbose_name="カテゴリー"
+    )
+
+    # ファイル
+    file = models.FileField(upload_to="upload", verbose_name="ファイル")
+
+    # 公開日時
     published_at = models.DateTimeField(
         null=True, blank=True, verbose_name="公開日時", help_text="未来の時間を設定した場合に、予約公開になる。"
     )
-    overview = models.CharField(max_length=500, null=True, blank=True)
-    tags = models.ManyToManyField(Tag)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    content = models.TextField()
-    file = models.FileField(upload_to="")
+
+    def __str__(self) -> str:
+        return self.title
