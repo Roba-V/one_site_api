@@ -87,7 +87,8 @@ class LanguageMixin(models.Model):
     class Meta:
         abstract = True
 
-    language = models.ForeignKey(Language, on_delete=models.PROTECT)
+    # 言語（外部キー）
+    language = models.ForeignKey(Language, on_delete=models.PROTECT, verbose_name="言語")
 
 
 class Tag(MetaMixin, LanguageMixin, SeoMixin):

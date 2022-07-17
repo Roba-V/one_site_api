@@ -18,7 +18,7 @@ class LanguageAdmin(admin.ModelAdmin):
             "オプション",
             {
                 "classes": ("collapse",),
-                "fields": ("alias", "sort"),
+                "fields": ("sort", "alias"),
             },
         ),
     )
@@ -28,16 +28,25 @@ class TagAdmin(admin.ModelAdmin):
     """タグ管理クラス"""
 
     # 一覧画面に表示するフィールド
-    list_display = ("name",)
+    list_display = ("name", "language")
+
+    # リンクを貼り付ける一覧画面のフィールド
+    list_display_links = ("name", "language")
+
+    # リストフィルター
+    list_filter = ("language",)
+
+    # 検索フィルター
+    search_fields = ("name",)
 
     # 編集画面で表示するフィールド
     fieldsets = (
-        (None, {"fields": ("name", ("created_user", "updated_user"))}),
+        (None, {"fields": ("name", ("created_user", "updated_user"), "language")}),
         (
             "オプション",
             {
                 "classes": ("collapse",),
-                "fields": ("alias", "sort"),
+                "fields": ("sort", "alias"),
             },
         ),
         (
