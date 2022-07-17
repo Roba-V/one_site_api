@@ -152,7 +152,7 @@ class Article(MetaMixin, LanguageMixin, SeoMixin):
     content = models.TextField(verbose_name="内容")
 
     # タグ
-    tags = models.ManyToManyField(Tag, verbose_name="タグ")
+    tags = models.ManyToManyField(Tag, null=True, blank=True, verbose_name="タグ")
 
     # カテゴリー
     category = models.ForeignKey(
@@ -160,7 +160,9 @@ class Article(MetaMixin, LanguageMixin, SeoMixin):
     )
 
     # ファイル
-    file = models.FileField(upload_to="upload", verbose_name="ファイル")
+    file = models.FileField(
+        upload_to="upload", null=True, blank=True, verbose_name="ファイル"
+    )
 
     # 公開日時
     published_at = models.DateTimeField(
