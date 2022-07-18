@@ -155,11 +155,13 @@ class Article(MetaMixin, LanguageMixin, SeoMixin):
     content = models.TextField(verbose_name="内容")
 
     # タグ
-    tags = models.ManyToManyField(Tag, null=True, blank=True, verbose_name="タグ")
+    tags = models.ManyToManyField(Tag, blank=True, verbose_name="タグ")
 
     # カテゴリー
     category = models.ForeignKey(
-        Category, on_delete=models.PROTECT, verbose_name="カテゴリー"
+        Category,
+        on_delete=models.PROTECT,
+        verbose_name="カテゴリー",
     )
 
     # ファイル
