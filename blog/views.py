@@ -1,4 +1,5 @@
 from rest_framework import serializers, viewsets
+
 from blog.models import Article, Tag, Category
 
 
@@ -29,6 +30,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = Article
         fields = [
             "url",
+            "id",
             "title",
             "overview",
             "content",
@@ -40,5 +42,5 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Article.objects.all()
+    queryset = Article.objects.all().order_by("-created_at")
     serializer_class = ArticleSerializer
